@@ -2,7 +2,7 @@
 
 `python` + `jupyterlab` + `jupyter notebook` + `thonny`
 
-EDUPYTER est un environnement de développement portable (donc isolé car installé dans un répertoire sans modification du système) et ne nécessitant pas de droits administrateur pour pouvoir l'installer et l'utiliser.
+EDUPYTER est un environnement de développement portable (donc isolé car installé dans un répertoire sans modification du système) ne nécessitant pas de droits administrateur pour pouvoir l'installer et l'utiliser.
 
 EDUPYTER est développé principalement pour les établissements scolaires qui souhaitent proposer à leurs élèves un environnement de développement Python / Jupyter facile à déployer et à maintenir.
 
