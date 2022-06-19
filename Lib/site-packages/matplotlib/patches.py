@@ -479,6 +479,9 @@ class Patch(artist.Artist):
         """
         Set the `.CapStyle`.
 
+        The default capstyle is 'round' for `.FancyArrowPatch` and 'butt' for
+        all other patches.
+
         Parameters
         ----------
         s : `.CapStyle` or %(CapStyle)s
@@ -495,6 +498,9 @@ class Patch(artist.Artist):
     def set_joinstyle(self, s):
         """
         Set the `.JoinStyle`.
+
+        The default joinstyle is 'round' for `.FancyArrowPatch` and 'miter' for
+        all other patches.
 
         Parameters
         ----------

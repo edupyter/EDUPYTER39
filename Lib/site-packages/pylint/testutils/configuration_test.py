@@ -1,15 +1,21 @@
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/main/LICENSE
+# Copyright (c) https://github.com/PyCQA/pylint/blob/main/CONTRIBUTORS.txt
 
 """Utility functions for configuration testing."""
+
+from __future__ import annotations
+
 import copy
 import json
 import logging
+import re
 import unittest
 from pathlib import Path
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict
 from unittest.mock import Mock
 
+from pylint.constants import PY38_PLUS
 from pylint.lint import Run
 
 # We use Any in this typing because the configuration contains real objects and constants
@@ -18,10 +24,17 @@ ConfigurationValue = Any
 PylintConfiguration = Dict[str, ConfigurationValue]
 
 
+if not PY38_PLUS:
+    # We need to deepcopy a compiled regex pattern
+    # In python 3.6 and 3.7 this requires a hack
+    # See https://stackoverflow.com/a/56935186
+    copy._deepcopy_dispatch[type(re.compile(""))] = lambda r, _: r  # type: ignore[attr-defined]
+
+
 def get_expected_or_default(
-    tested_configuration_file: Union[str, Path],
+    tested_configuration_file: str | Path,
     suffix: str,
-    default: ConfigurationValue,
+    default: str,
 ) -> str:
     """Return the expected value from the file if it exists, or the given default."""
     expected = default
@@ -31,7 +44,7 @@ def get_expected_or_default(
         with open(expected_result_path, encoding="utf8") as f:
             expected = f.read()
         # logging is helpful to realize your file is not taken into
-        # account after a misspell of the file name. The output of the
+        # account after a misspelling of the file name. The output of the
         # program is checked during the test so printing messes with the result.
         logging.info("%s exists.", expected_result_path)
     else:
@@ -46,7 +59,7 @@ EXPECTED_CONF_REMOVE_KEY = "functional_remove"
 def get_expected_configuration(
     configuration_path: str, default_configuration: PylintConfiguration
 ) -> PylintConfiguration:
-    """Get the expected parsed configuration of a configuration functional test"""
+    """Get the expected parsed configuration of a configuration functional test."""
     result = copy.deepcopy(default_configuration)
     config_as_json = get_expected_or_default(
         configuration_path, suffix="result.json", default="{}"
@@ -69,9 +82,9 @@ def get_expected_configuration(
 
 
 def get_related_files(
-    tested_configuration_file: Union[str, Path], suffix_filter: str
-) -> List[Path]:
-    """Return all the file related to a test conf file endind with a suffix."""
+    tested_configuration_file: str | Path, suffix_filter: str
+) -> list[Path]:
+    """Return all the file related to a test conf file ending with a suffix."""
     conf_path = Path(tested_configuration_file)
     return [
         p
@@ -81,8 +94,8 @@ def get_related_files(
 
 
 def get_expected_output(
-    configuration_path: Union[str, Path], user_specific_path: Path
-) -> Tuple[int, str]:
+    configuration_path: str | Path, user_specific_path: Path
+) -> tuple[int, str]:
     """Get the expected output of a functional test."""
     exit_code = 0
     msg = (
@@ -130,8 +143,8 @@ def get_expected_output(
 
 
 def run_using_a_configuration_file(
-    configuration_path: Union[Path, str], file_to_lint: str = __file__
-) -> Tuple[Mock, Mock, Run]:
+    configuration_path: Path | str, file_to_lint: str = __file__
+) -> tuple[Mock, Mock, Run]:
     """Simulate a run with a configuration without really launching the checks."""
     configuration_path = str(configuration_path)
     args = ["--rcfile", configuration_path, file_to_lint]
@@ -139,7 +152,7 @@ def run_using_a_configuration_file(
     # would not be accessible outside the `with` block.
     with unittest.mock.patch("sys.exit") as mocked_exit:
         # Do not actually run checks, that could be slow. We don't mock
-        # `Pylinter.check`: it calls `Pylinter.initialize` which is
+        # `PyLinter.check`: it calls `PyLinter.initialize` which is
         # needed to properly set up messages inclusion/exclusion
         # in `_msg_states`, used by `is_message_enabled`.
         check = "pylint.lint.pylinter.check_parallel"

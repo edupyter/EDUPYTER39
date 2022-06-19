@@ -618,7 +618,8 @@ class _FigureCanvasWxBase(FigureCanvasBase, wx.Panel):
                else self.bitmap)
         drawDC.DrawBitmap(bmp, 0, 0)
         if self._rubberband_rect is not None:
-            x0, y0, x1, y1 = self._rubberband_rect
+            # Some versions of wx+python don't support numpy.float64 here.
+            x0, y0, x1, y1 = map(int, self._rubberband_rect)
             drawDC.DrawLineList(
                 [(x0, y0, x1, y0), (x1, y0, x1, y1),
                  (x0, y0, x0, y1), (x0, y1, x1, y1)],
@@ -749,7 +750,7 @@ class _FigureCanvasWxBase(FigureCanvasBase, wx.Panel):
             cursors.RESIZE_VERTICAL: wx.CURSOR_SIZENS,
         }, cursor=cursor))
         self.SetCursor(cursor)
-        self.Update()
+        self.Refresh()
 
     def _set_capture(self, capture=True):
         """Control wx mouse capture."""
@@ -1139,15 +1140,19 @@ class NavigationToolbar2Wx(NavigationToolbar2, wx.ToolBar):
     def get_canvas(self, frame, fig):
         return type(self.canvas)(frame, -1, fig)
 
+    def _update_buttons_checked(self):
+        if "Pan" in self.wx_ids:
+            self.ToggleTool(self.wx_ids["Pan"], self.mode.name == "PAN")
+        if "Zoom" in self.wx_ids:
+            self.ToggleTool(self.wx_ids["Zoom"], self.mode.name == "ZOOM")
+
     def zoom(self, *args):
-        tool = self.wx_ids['Zoom']
-        self.ToggleTool(tool, not self.GetToolState(tool))
         super().zoom(*args)
+        self._update_buttons_checked()
 
     def pan(self, *args):
-        tool = self.wx_ids['Pan']
-        self.ToggleTool(tool, not self.GetToolState(tool))
         super().pan(*args)
+        self._update_buttons_checked()
 
     def save_figure(self, *args):
         # Fetch the required filename and file type.
@@ -1289,8 +1294,7 @@ class ToolbarWx(ToolContainerBase, wx.ToolBar):
 
 class ConfigureSubplotsWx(backend_tools.ConfigureSubplotsBase):
     def trigger(self, *args):
-        NavigationToolbar2Wx.configure_subplots(
-            self._make_classic_style_pseudo_toolbar())
+        NavigationToolbar2Wx.configure_subplots(self)
 
 
 class SaveFigureWx(backend_tools.SaveFigureBase):

@@ -115,6 +115,28 @@ def _create_qApp():
                     QtCore.Qt.AA_EnableHighDpiScaling)
             except AttributeError:  # Only for Qt>=5.6, <6.
                 pass
+
+            # Check to make sure a QApplication from a different major version
+            # of Qt is not instantiated in the process
+            if QT_API in {'PyQt6', 'PySide6'}:
+                other_bindings = ('PyQt5', 'PySide2')
+            elif QT_API in {'PyQt5', 'PySide2'}:
+                other_bindings = ('PyQt6', 'PySide6')
+            else:
+                raise RuntimeError("Should never be here")
+
+            for binding in other_bindings:
+                mod = sys.modules.get(f'{binding}.QtWidgets')
+                if mod is not None and mod.QApplication.instance() is not None:
+                    other_core = sys.modules.get(f'{binding}.QtCore')
+                    _api.warn_external(
+                        f'Matplotlib is using {QT_API} which wraps '
+                        f'{QtCore.qVersion()} however an instantiated '
+                        f'QApplication from {binding} which wraps '
+                        f'{other_core.qVersion()} exists.  Mixing Qt major '
+                        'versions may not work as expected.'
+                    )
+                    break
             try:
                 QtWidgets.QApplication.setHighDpiScaleFactorRoundingPolicy(
                     QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
@@ -677,8 +699,14 @@ class NavigationToolbar2QT(NavigationToolbar2, QtWidgets.QToolBar):
         Construct a `.QIcon` from an image file *name*, including the extension
         and relative to Matplotlib's "images" data directory.
         """
-        name = name.replace('.png', '_large.png')
-        pm = QtGui.QPixmap(str(cbook._get_data_path('images', name)))
+        # use a high-resolution icon with suffix '_large' if available
+        # note: user-provided icons may not have '_large' versions
+        path_regular = cbook._get_data_path('images', name)
+        path_large = path_regular.with_name(
+            path_regular.name.replace('.png', '_large.png'))
+        filename = str(path_large if path_large.exists() else path_regular)
+
+        pm = QtGui.QPixmap(filename)
         _setDevicePixelRatio(pm, _devicePixelRatioF(self))
         if self.palette().color(self.backgroundRole()).value() < 128:
             icon_color = self.palette().color(self.foregroundRole())
@@ -788,7 +816,8 @@ class NavigationToolbar2QT(NavigationToolbar2, QtWidgets.QToolBar):
             except Exception as e:
                 QtWidgets.QMessageBox.critical(
                     self, "Error saving file", str(e),
-                    QtWidgets.QMessageBox.Ok, QtWidgets.QMessageBox.NoButton)
+                    _enum("QtWidgets.QMessageBox.StandardButton").Ok,
+                    _enum("QtWidgets.QMessageBox.StandardButton").NoButton)
 
     def set_history_buttons(self):
         can_backward = self._nav_stack._pos > 0
@@ -966,9 +995,12 @@ class ToolbarQt(ToolContainerBase, QtWidgets.QToolBar):
 
 
 class ConfigureSubplotsQt(backend_tools.ConfigureSubplotsBase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._subplot_dialog = None
+
     def trigger(self, *args):
-        NavigationToolbar2QT.configure_subplots(
-            self._make_classic_style_pseudo_toolbar())
+        NavigationToolbar2QT.configure_subplots(self)
 
 
 class SaveFigureQt(backend_tools.SaveFigureBase):
