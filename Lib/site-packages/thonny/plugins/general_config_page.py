@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import messagebox, ttk
 
 from thonny import get_workbench, languages, tktextext
 from thonny.config_ui import ConfigurationPage
@@ -97,7 +97,13 @@ class GeneralConfigurationPage(ConfigurationPage):
         env_label = ttk.Label(self, text=tr("Environment variables (one KEY=VALUE per line)"))
         env_label.grid(row=90, column=0, sticky=tk.W, pady=(20, 0), columnspan=2)
         self.env_box = tktextext.TextFrame(
-            self, horizontal_scrollbar=False, height=4, borderwidth=1, undo=True, wrap="none"
+            self,
+            horizontal_scrollbar=False,
+            height=4,
+            width=30,
+            borderwidth=1,
+            undo=True,
+            wrap="none",
         )
         self.env_box.grid(row=100, column=0, sticky="nsew", pady=(0, 10), columnspan=2)
         for entry in get_workbench().get_option("general.environment"):
@@ -121,7 +127,20 @@ class GeneralConfigurationPage(ConfigurationPage):
 
         env = []
         for entry in self.env_box.text.get("1.0", "end").strip("\r\n").splitlines():
-            env.append(entry.strip("\r\n"))
+            entry = entry.strip("\r\n")
+            env.append(entry)
+
+        if any(entry.endswith("'") or entry.endswith('"') for entry in env):
+            if not messagebox.askyesno(
+                tr("Warning"),
+                tr(
+                    "If you quote the value of an environment variable, the quotes will"
+                    " be part of the value.\nDid you intend this?"
+                ),
+                parent=self,
+            ):
+                return False
+
         get_workbench().set_option("general.environment", env)
 
 

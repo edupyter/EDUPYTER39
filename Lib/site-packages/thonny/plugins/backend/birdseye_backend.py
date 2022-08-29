@@ -1,10 +1,11 @@
 import os
 
-from thonny.plugins.cpython.cpython_backend import (
-    get_backend,
+from thonny.common import try_load_modules_with_frontend_sys_path
+from thonny.plugins.cpython_backend.cp_back import (
     Executor,
-    return_execution_result,
+    get_backend,
     prepare_hooks,
+    return_execution_result,
 )
 
 
@@ -30,8 +31,7 @@ class BirdsEyeRunner(Executor):
 
         global_vars = __main__.__dict__
 
-        # Following is a trick, which allows importing birdseye in the backends,
-        # which doesn't have it installed (provided it is installed for frontend Python)
+        try_load_modules_with_frontend_sys_path("birdseye")
         from birdseye.bird import eye
 
         eye.exec_string(source, filename, globs=global_vars, locs=global_vars, deep=True)
