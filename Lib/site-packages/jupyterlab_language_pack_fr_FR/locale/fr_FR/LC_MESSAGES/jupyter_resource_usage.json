@@ -1,0 +1,91 @@
+{
+    "": {
+        "domain": "jupyter_resource_usage",
+        "language": "fr-FR",
+        "plural_forms": "nplurals=2; plural=(n > 1);",
+        "version": "jupyterlab"
+    },
+    "%2%% used on %1 CPU": [
+        "%2%% used on %1 CPUs",
+        "%2%% utilis\u00e9 sur %1 processeur",
+        "%2%% utilis\u00e9 sur %1 processeurs"
+    ],
+    "Active:": [
+        "Actif :"
+    ],
+    "Available:": [
+        "Disponible\u00a0:"
+    ],
+    "CPU:": [
+        "Processeur :"
+    ],
+    "Current memory usage": [
+        "Utilisation actuelle de la m\u00e9moire"
+    ],
+    "Free:": [
+        "Libre\u00a0:"
+    ],
+    "Host CPU": [
+        "CPU de l'h\u00f4te"
+    ],
+    "Host Virtual Memory": [
+        "M\u00e9moire virtuelle de l'h\u00f4te"
+    ],
+    "Inactive:": [
+        "Inactif :"
+    ],
+    "Kernel Host:": [
+        "H\u00f4te du noyau :"
+    ],
+    "Kernel ID:": [
+        "Identifiant du noyau\u00a0:"
+    ],
+    "Kernel Resource": [
+        "Ressources du noyau"
+    ],
+    "Kernel Usage": [
+        "Utilisation du noyau"
+    ],
+    "Kernel usage": [
+        "Utilisation du noyau"
+    ],
+    "Kernel usage details are not available": [
+        "Les d\u00e9tails d'utilisation du noyau ne sont pas disponibles"
+    ],
+    "Kernel usage is not available": [
+        "L'utilisation du noyau n'est pas disponible"
+    ],
+    "Mem: %1 %2": [
+        "M\u00e9m: %1 %2"
+    ],
+    "Mem: %1 / %2 %3": [
+        "M\u00e9m: %1 / %2 %3"
+    ],
+    "Memory:": [
+        "M\u00e9moire :"
+    ],
+    "Notebook:": [
+        "Notebook :"
+    ],
+    "Percent used:": [
+        "Pourcentage utilis\u00e9 :"
+    ],
+    "Please check with your system administrator that you are running IPyKernel version 6.10.0 or above.": [
+        "Veuillez v\u00e9rifier aupr\u00e8s de votre administrateur syst\u00e8me que vous utilisez IPyKernel version 6.10.0 ou sup\u00e9rieure."
+    ],
+    "Process ID:": [
+        "ID du processus :"
+    ],
+    "Timestamp:": [
+        "Date et heure :"
+    ],
+    "Total:": [
+        "Total :"
+    ],
+    "Used:": [
+        "Utilis\u00e9 :"
+    ],
+    "Wired:": [
+        "Branch\u00e9 :"
+    ]
+}
