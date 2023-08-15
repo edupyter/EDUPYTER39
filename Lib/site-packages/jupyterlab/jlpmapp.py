@@ -1,4 +1,3 @@
-# coding: utf-8
 """A Jupyter-aware wrapper for the yarn package manager"""
 
 import os
@@ -34,11 +33,11 @@ def execvp(cmd, argv):
         p.wait()
         sys.exit(p.returncode)
     else:
-        os.execvp(cmd, argv)
+        os.execvp(cmd, argv)  # noqa S606
 
 
 def main(argv=None):
     """Run node and return the result."""
     # Make sure node is available.
     argv = argv or sys.argv[1:]
-    execvp("node", ["node", YARN_PATH] + argv)
+    execvp("node", ["node", YARN_PATH, *argv])

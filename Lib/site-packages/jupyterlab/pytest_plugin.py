@@ -1,3 +1,6 @@
+# Copyright (c) Jupyter Development Team.
+# Distributed under the terms of the Modified BSD License.
+
 import urllib.parse
 
 import pytest
@@ -96,13 +99,14 @@ def labapp(jp_serverapp, make_lab_app):
 def fetch_long(http_server_client, jp_auth_header, jp_base_url):
     """fetch fixture that handles auth, base_url, and path"""
 
-    def client_fetch(*parts, headers={}, params={}, **kwargs):
+    def client_fetch(*parts, headers=None, params=None, **kwargs):
         # Handle URL strings
         path_url = url_escape(url_path_join(*parts), plus=False)
         path_url = url_path_join(jp_base_url, path_url)
-        params_url = urllib.parse.urlencode(params)
+        params_url = urllib.parse.urlencode(params or {})
         url = path_url + "?" + params_url
         # Add auth keys to header
+        headers = headers or {}
         headers.update(jp_auth_header)
         # Make request.
         return http_server_client.fetch(url, headers=headers, request_timeout=250, **kwargs)

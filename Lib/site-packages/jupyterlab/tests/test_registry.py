@@ -55,7 +55,7 @@ class TestAppHandlerRegistry(AppHandlerTest):
     def test_yarn_config_failure(self):
         with patch("subprocess.check_output") as check_output:
             check_output.side_effect = subprocess.CalledProcessError(
-                1, ["yarn", "config", "list"], stderr=b"yarn config failed."
+                1, ["yarn", "config", "list"], b"", stderr=b"yarn config failed."
             )
 
             logger = logging.getLogger("jupyterlab")
@@ -107,5 +107,6 @@ class TestAppHandlerRegistry(AppHandlerTest):
             with open(lock_path) as f:
                 lock = f.read()
 
+            # yarn >=2.x does not record the registry in the lockfile
             self.assertNotIn(commands.YARN_DEFAULT_REGISTRY, lock)
-            self.assertIn(yarn_registry, lock)
+            self.assertNotIn(yarn_registry, lock)

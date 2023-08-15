@@ -19,6 +19,12 @@
       },
       "type": "array",
       "default": []
+    },
+    "trustByDefault": {
+      "type": "boolean",
+      "title": "Trust HTML by default",
+      "description": "Whether to trust HTML files upon opening",
+      "default": false
     }
   },
   "additionalProperties": false,
@@ -52,6 +58,11 @@
         "label": {
           "title": "Item label",
           "description": "If defined, it will override the command label",
+          "type": "string"
+        },
+        "caption": {
+          "title": "Item caption",
+          "description": "If defined, it will override the command caption",
           "type": "string"
         },
         "type": {
