@@ -904,7 +904,7 @@ msgstr "Es scheint, Sie wollen ein Thonny zugehöriges Paket installieren.\n"
 "Falls es ein Thonny Plug-in ist, dann wählen Sie bitte\n"
 "'Extras → Verwalte Plug-ins...'\n"
 "\n"
-"Sind Sie sicher, dass Sie %s als Backend installieren wollen?"
+"Sind Sie sicher, dass Sie %s als Back-end installieren wollen?"
 
 #: thonny/plugins/pip_gui.py:1141
 msgid "NB! There may be another version available which is compatible with current Thonny version. Click on '...' button to choose the version to install."
@@ -1937,7 +1937,9 @@ msgstr "Problem beim Laden der Datei"
 msgid "This file seems to have problems with encoding.\n"
 "\n"
 "Make sure it is in UTF-8 or contains proper encoding hint."
-msgstr ""
+msgstr "Es ist ein Problem mit der Eingabecodierung aufgetreten.\n"
+"\n"
+"Stellen Sie sicher, dass die Datei entweder UTF-8 konform ist, oder explizit auf die Eingabekodierung hinweist."
 
 #: thonny/editors.py:295
 msgid "File is open"
@@ -1948,7 +1950,10 @@ msgid "This file is already open in Thonny.\n"
 "\n"
 "If you want to save with this name,\n"
 "close the existing editor first!"
-msgstr ""
+msgstr "Die Datei ist bereits von Thonny geöffnet.\n"
+"\n"
+"Wenn Sie sie unter diesem Namen speichern wollen,\n"
+"sollten Sie den Editor zuerst schließen!"
 
 #: thonny/editors.py:349
 msgid "Permission Error"
@@ -1960,7 +1965,7 @@ msgstr "Es sieht so aus, als ob diese Datei oder dieser Ordner nicht beschreibba
 
 #: thonny/editors.py:414
 msgid "Back-end is not ready"
-msgstr ""
+msgstr "Das Back-end ist noch nicht bereit"
 
 #: thonny/editors.py:419
 msgid "Where to save to?"
@@ -1972,7 +1977,7 @@ msgstr "Mögliches Problem"
 
 #: thonny/editors.py:491
 msgid "If you name your script '%s', you won't be able to import the library module named '%s'"
-msgstr ""
+msgstr "Wenn Sie Ihr Skript '%s' nennen, sind Sie nicht in der Lage das Bibliotheksmodul '%s' zu importieren"
 
 #: thonny/editors.py:497
 msgid "Do you still want to use this name for your script?"
@@ -1981,7 +1986,7 @@ msgstr "Möchtest du diesen Namen weiterhin für dein Skript verwenden?"
 #: thonny/editors.py:1053
 msgid "Got permission error when trying to load\n"
 "%s"
-msgstr ""
+msgstr "Zugangsfehler beim Versuch %s zu laden"
 
 #: thonny/editors.py:1055
 msgid "Try opening it with File => Open."
@@ -1997,13 +2002,13 @@ msgstr "Ausführung unbenannter Programme erlauben"
 
 #: thonny/plugins/pip_gui.py:600
 msgid "License"
-msgstr ""
+msgstr "Lizenz"
 
 #: thonny/plugins/run_debug_config_page.py:27
 msgid "Warn if a user module shadows a library module"
-msgstr ""
+msgstr "Warne wenn ein benutzerdefiniertes Modul ein Bibliotheksmodul unzugänglich macht"
 
 #: thonny/plugins/micropython/pip_gui.py:65
 msgid "Search micropython-lib and PyPI"
-msgstr ""
+msgstr "Suche micropython-lib und PyPI"
 
